@@ -38,8 +38,6 @@ const thirdTask = new Item({
 
 const defaultItems = [firstTask, secondtTask, thirdTask];
 
-// Item.insertMany(defaultItems);
-
 const listSchema = {
   name: String,
   items: [itemsSchema]
