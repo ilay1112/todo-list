@@ -8,6 +8,8 @@ const {
 } = require("mongoose");
 const date = require(__dirname + "/date.js");
 const _ = require("lodash")
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 
@@ -18,7 +20,11 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb+srv://ilay-rosenstein:ilay0470@cluster0.cu8e9.mongodb.net/todolistDB");
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cu8e9.${process.env.DB_HOST}/blogDB`, 
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
 
 const itemsSchema = {
   name: String
