@@ -8,7 +8,7 @@ const {
 } = require("mongoose");
 const date = require(__dirname + "/date.js");
 const _ = require("lodash")
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
@@ -20,11 +20,10 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static("public"));
 
-mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cu8e9.${process.env.DB_HOST}/blogDB`, 
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cu8e9.${process.env.DB_HOST}/blogDB`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
 const itemsSchema = {
   name: String
@@ -138,15 +137,21 @@ app.post("/", function (req, res) {
   });
 
   if (listName === "Today") {
-    item.save();
-    res.redirect("/");
+    item.save(function (err) {
+      if (!err) {
+        res.redirect("/");
+      }
+    });
   } else {
     List.findOne({
       name: listName
     }, function (err, foundList) {
       foundList.items.push(item);
-      foundList.save();
-      res.redirect("/" + listName);
+      foundList.save(function(err) {
+        if (!err) {
+          res.redirect("/" + listName);
+        }
+      });
     })
   }
 
